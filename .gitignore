@@ -1,0 +1,12 @@
+# Ignore PyCharm folder
+.idea/
+
+# Ignore virtual environment folder
+.venv/
+
+# Ignore distribution folder
+dist/
+
+# Ignore test files
+*.xlsx
+*.txt
