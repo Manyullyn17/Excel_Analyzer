@@ -75,20 +75,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.showTableButton.clicked.connect(self.toggle_table)
 
     def switch_1_file_2_files(self):
-        if self.oneFileRadioButton.isChecked():
-            self.twoFileMode = False
-            self.selectFileTwoButton.setVisible(False)
+        state = self.twoFileRadioButton.isChecked()
+
+        self.twoFileMode = state
+        self.selectFileTwoButton.setVisible(state)
+        self.fileTwoPath.setVisible(state)
+
+        if state: # Two File Mode
+            self.selectFileOneButton.setText('Select File 1')
+            self.fileTwoList.clear()
+        else: # One File Mode
             self.selectFileOneButton.setText('Select File')
-            self.fileTwoPath.setVisible(False)
             if self.fileTwoList.count() == 0 and self.fileOneXls:
                 for sheet in self.fileOneXls.sheet_names:
                     self.fileTwoList.addItem(sheet)
-        else:
-            self.twoFileMode = True
-            self.selectFileTwoButton.setVisible(True)
-            self.selectFileOneButton.setText('Select File 1')
-            self.fileTwoPath.setVisible(True)
-            self.fileTwoList.clear()
 
     def load_file_one(self):
         file, _ = QFileDialog.getOpenFileName(self, 'Select Input Excel File', '', 'Excel Files (*.xlsx;*.xls)')
@@ -181,7 +181,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.fileTwoList.clear()
             self.fileTwoList.addItem(f'Failed to load file')
         else:
-            QMessageBox.critical(self, 'Error', 'No filenum provided and loading failed')
+            QMessageBox.critical(self, 'Error', 'No valid filenum provided and loading failed')
 
     def select_sheet_one(self):
         if self.fileOneFinishedLoading:
@@ -283,11 +283,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 else:
                     item = QStandardItem(mode)
                     model.appendRow(item)
-
             self.modeSelectBox.setModel(model)
-
-
-            #self.modeSelectBox.addItems(self.differenceModes)
 
         elif self.operation == 2: # Count Occurences
             set_two_sheet_mode(True)
@@ -303,7 +299,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             for dateFormat in self.dateFormats:
                 self.modeSelectBox.addItem(datetime.now().strftime(format=dateFormat))
 
-        else: # No operation selected
+        else: # No valid operation selected
             QMessageBox.information(self, 'Huh?', f'How did you get here?\nOperation Number: {self.operation}')
 
     def mode_change(self):
