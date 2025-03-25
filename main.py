@@ -661,11 +661,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def toggle_table(self):
         if self.outputTable.isVisible():
             self.outputTable.setVisible(False)
-            self.resize(self.width() // 2, self.height())
+            self.resize((self.width() - 2) // 2 + self.showTableButton.width(), self.height())
             self.showTableButton.setText('>')
         else:
             self.outputTable.setVisible(True)
-            self.resize(self.width() * 2, self.height())
+            self.resize((self.width() - self.showTableButton.width()) * 2 + 2, self.height())
             self.showTableButton.setText('<')
 
 if __name__ == '__main__':
@@ -677,7 +677,7 @@ if __name__ == '__main__':
         base_path = os.path.dirname(os.path.abspath(__file__))
 
     icon_path = os.path.join(base_path, 'Excel_Analyzer_Icon.ico')
-    icon_png_path = os.path.join(base_path, 'Excel_Analyzer_Icon.png')
+    #icon_png_path = os.path.join(base_path, 'Excel_Analyzer_Icon.png')
 
     app = QApplication(sys.argv)
     app.setWindowIcon(QtGui.QIcon(QtGui.QPixmap(icon_path)))
